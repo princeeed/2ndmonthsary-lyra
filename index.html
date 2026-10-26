@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 2nd Monthsary, My Lyra! 💜</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti Library for Purple Heart Fireworks -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #000000;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            transition: background-color 1.5s ease-in-out;
+        }
+
+        .font-handwriting {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Falling Purple Hearts Snow */
+        .falling-heart {
+            position: fixed;
+            top: -10%;
+            pointer-events: none;
+            z-index: 15;
+            animation: heartFall linear infinite;
+        }
+
+        @keyframes heartFall {
+            0% {
+                transform: translateY(0vh) rotate(0deg) scale(0.8);
+                opacity: 0.9;
+            }
+            50% {
+                transform: translateY(50vh) rotate(180deg) scale(1.1);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg) scale(0.8);
+                opacity: 0.1;
+            }
+        }
+
+        /* Glow Effects */
+        .glow-purple {
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.7);
+        }
+        
+        .glow-purple-hover:hover {
+            box-shadow: 0 0 40px rgba(192, 132, 252, 0.9);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 15px rgba(216, 180, 254, 0.8);
+        }
+
+        /* Lavender Side Borders Shadow */
+        .lavender-side {
+            filter: drop-shadow(0px 0px 10px rgba(168, 85, 247, 0.5));
+        }
+
+        /* Custom Scrollbar for Letter Modal */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f3e8ff;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #9333ea;
+            border-radius: 8px;
+        }
+
+        /* Pull Down Tab Hover Effect */
+        .pull-tab {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .pull-tab:hover {
+            transform: translateY(6px);
+        }
+
+        @keyframes pandaWaving {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-25deg); }
+        }
+
+        .animate-wave {
+            transform-origin: bottom left;
+            animation: pandaWaving 0.8s ease-in-out infinite;
+        }
+
+        @keyframes bambooChew {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        .animate-chew {
+            transform-origin: center;
+            animation: bambooChew 0.6s ease-in-out infinite;
+        }
+
+        .photo-card {
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 relative selection:bg-purple-300 selection:text-purple-900">
+
+    <!-- CONTINUOUS FALLING HEARTS CONTAINER -->
+    <div id="hearts-container" class="fixed inset-0 pointer-events-none z-10 overflow-hidden"></div>
+
+    <!-- INTRO / START SCREEN -->
+    <div id="intro-screen" class="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center p-4">
+        <div class="text-center space-y-8 max-w-md">
+            <div class="text-6xl animate-bounce">
+                🪻 💜 🪻
+            </div>
+            <button id="start-btn" onclick="startExperience()" class="bg-gradient-to-r from-purple-700 via-purple-600 to-indigo-600 hover:from-purple-600 hover:to-indigo-500 text-white font-bold py-5 px-10 rounded-full shadow-2xl glow-purple glow-purple-hover transform hover:scale-110 active:scale-95 transition-all duration-300 text-2xl border-2 border-purple-300 flex items-center justify-center gap-3 mx-auto cursor-pointer">
+                <span>Our 2nd Month! 💜</span>
+            </button>
+            <p class="text-purple-300/70 text-xs tracking-widest uppercase">Click to begin our celebration</p>
+        </div>
+    </div>
+
+    <!-- MAIN APP STRUCTURE -->
+    <div id="main-content" class="min-h-screen opacity-0 transition-opacity duration-1000 bg-gradient-to-b from-purple-950 via-purple-900 to-slate-950 relative flex flex-col justify-between pb-16 overflow-hidden">
+
+        <!-- LAVENDER FLOWERS BORDERS (Left Edge) -->
+        <div class="fixed top-0 bottom-0 left-1 md:left-4 w-12 md:w-20 pointer-events-none z-20 flex flex-col justify-between py-6 lavender-side">
+            <div class="text-3xl md:text-5xl space-y-6 text-center">
+                <div>🪻</div><div>🪻</div><div>🪻</div><div>🪻</div><div>🪻</div>
+            </div>
+        </div>
+
+        <!-- LAVENDER FLOWERS BORDERS (Right Edge) -->
+        <div class="fixed top-0 bottom-0 right-1 md:right-4 w-12 md:w-20 pointer-events-none z-20 flex flex-col justify-between py-6 lavender-side">
+            <div class="text-3xl md:text-5xl space-y-6 text-center">
+                <div>🪻</div><div>🪻</div><div>🪻</div><div>🪻</div><div>🪻</div>
+            </div>
+        </div>
+
+        <!-- TOP PULL-DOWN TAB FOR MAIL -->
+        <div id="top-pull-tab" class="fixed top-0 inset-x-0 z-40 flex justify-center transform -translate-y-full transition-transform duration-500">
+            <button onclick="reopenMail()" class="pull-tab bg-purple-700 hover:bg-purple-600 text-white px-6 py-2.5 rounded-b-2xl shadow-2xl border-b-2 border-x border-purple-300 flex items-center gap-2 cursor-pointer font-medium text-sm group">
+                <i class="fa-solid fa-envelope-open-text text-purple-200 group-hover:scale-110 transition-transform"></i>
+                <span>Pull Down to Re-open Letter 💜</span>
+                <i class="fa-solid fa-chevron-down text-xs text-purple-300"></i>
+            </button>
+        </div>
+
+        <!-- HEADER TITLE -->
+        <header class="text-center pt-8 pb-4 px-6 z-20">
+            <div class="inline-block px-4 py-1.5 bg-purple-950/80 rounded-full border border-purple-400/30 text-purple-200 text-xs md:text-sm font-medium mb-3 shadow-md">
+                🪻 August 27 — October 27, 2026 🪻
+            </div>
+            <h1 class="text-3xl md:text-5xl font-bold text-white font-handwriting text-glow">
+                Happy 2nd Monthsary, My Lyra! 💜
+            </h1>
+        </header>
+
+        <!-- MAIN INTERACTIVE DISPLAY AREA -->
+        <main class="container mx-auto px-4 max-w-3xl z-20 flex-grow flex flex-col items-center justify-center my-4 min-h-[480px]">
+
+            <!-- STEP 1: GREETING & PANDA WITH MAIL -->
+            <div id="step-1-wrapper" class="w-full flex flex-col items-center justify-center transition-all duration-700">
+                <div class="text-center mb-6">
+                    <p class="text-purple-200 text-base md:text-lg font-light bg-purple-950/70 border border-purple-400/30 px-6 py-2.5 rounded-full shadow-lg inline-block animate-pulse">
+                        <i class="fa-solid fa-hand-pointer mr-2"></i> Look! PanPan brought a special letter for you. Click the mail to open it! 💜
+                    </p>
+                </div>
+
+                <div class="relative w-full max-w-md flex flex-col items-center justify-center py-6">
+                    <div id="envelope-button" onclick="openMailModal()" class="cursor-pointer group relative w-72 h-48 md:w-80 md:h-52 bg-purple-100 rounded-2xl shadow-2xl border-2 border-purple-300 flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105 active:scale-95">
+                        <div class="absolute top-0 inset-x-0 h-1/2 bg-purple-300 rounded-t-2xl origin-top flex items-start justify-center pt-3 border-b border-purple-400/30">
+                            <i class="fa-solid fa-heart text-purple-600 text-3xl group-hover:scale-125 transition-transform duration-300"></i>
+                        </div>
+                        <div class="z-10 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-xl border-2 border-white group-hover:rotate-12 transition-transform">
+                            <i class="fa-solid fa-envelope text-2xl"></i>
+                        </div>
+                        <div class="absolute bottom-3 text-xs font-bold text-purple-900 tracking-wider uppercase">
+                            Open My Message 🩺💜
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: PHOTO GALLERY & MESSAGES -->
+            <div id="step-2-wrapper" class="hidden w-full flex-col items-center justify-center space-y-6 transition-all duration-700">
+                <div class="text-center">
+                    <h2 class="text-2xl md:text-3xl text-purple-200 font-handwriting text-glow">
+                        Our Special Memories Together 📸
+                    </h2>
+                    <p class="text-purple-300 text-xs md:text-sm mt-1">
+                        Click through each photo card to read my messages for you 💜
+                    </p>
+                </div>
+
+                <div class="w-full max-w-sm flex flex-col items-center">
+                    <div id="active-photo-card" class="photo-card bg-white p-5 rounded-2xl shadow-2xl border-2 border-purple-200 w-full flex flex-col items-center relative">
+                        
+                        <div class="w-full h-64 md:h-72 bg-purple-100 rounded-xl overflow-hidden relative flex items-center justify-center border border-purple-200">
+                            <img id="card-display-img" src="MOAlove1.jpg" onerror="handleImageError(this)" class="w-full h-full object-cover" alt="Our Memory">
+                            <label class="absolute bottom-3 right-3 bg-purple-900/80 hover:bg-purple-900 text-white p-2.5 rounded-full cursor-pointer text-xs shadow-lg backdrop-blur-sm" title="Upload photo">
+                                <i class="fa-solid fa-camera"></i>
+                                <input type="file" class="hidden" accept="image/*" onchange="loadPhotoCardImage(event)">
+                            </label>
+                        </div>
+
+                        <div class="mt-4 flex items-center justify-between w-full">
+                            <span id="card-badge" class="text-xs font-bold bg-purple-100 text-purple-800 px-3 py-1 rounded-full border border-purple-300">
+                                Photo 1 of 3
+                            </span>
+                            <span class="text-xs text-purple-400 font-medium">Click button below to continue</span>
+                        </div>
+
+                        <div class="mt-4 p-4 bg-purple-50 rounded-xl border border-purple-200 text-center w-full min-h-[80px] flex items-center justify-center">
+                            <p id="card-message-text" class="text-base md:text-lg font-bold text-purple-950 font-handwriting leading-snug">
+                                You're the only one in my heart 💜
+                            </p>
+                        </div>
+
+                        <button id="next-card-btn" onclick="handleNextPhotoCard()" class="mt-5 w-full bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white font-bold py-3 px-6 rounded-xl shadow-lg border border-purple-300 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                            <span id="next-card-btn-text">Next Photo 💜</span>
+                            <i class="fa-solid fa-arrow-right text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: FINAL CENTRAL MESSAGE & RELATIONSHIP COUNTER -->
+            <div id="step-3-wrapper" class="hidden w-full flex-col items-center justify-center text-center space-y-8 transition-all duration-1000">
+                <div class="bg-purple-950/80 border-2 border-purple-400/40 p-8 md:p-10 rounded-3xl backdrop-blur-md shadow-2xl max-w-2xl w-full">
+                    <h2 class="text-3xl md:text-5xl font-bold text-white font-handwriting mb-3 text-glow">
+                        "I love you always and forever, Love! 💜"
+                    </h2>
+                    <p class="text-purple-200 text-sm md:text-base font-light">
+                        Every single day with you is a blessing I cherish with all my heart.
+                    </p>
+                </div>
+
+                <div class="w-full max-w-2xl bg-gradient-to-r from-purple-900/90 to-indigo-900/90 p-6 md:p-8 rounded-3xl border border-purple-300/40 shadow-2xl backdrop-blur-md">
+                    <div class="text-xs uppercase tracking-widest text-purple-300 font-semibold mb-6 flex items-center justify-center gap-2">
+                        <span>💖 Together Since August 27, 2026 💖</span>
+                    </div>
+
+                    <!-- Counter Grid (Locked explicitly to 2 Months, 0 Weeks, 0 Days) -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 text-white">
+                        <div class="bg-purple-950/80 p-3 rounded-2xl border border-purple-500/30">
+                            <span id="timer-months" class="block text-2xl md:text-3xl font-bold text-purple-300">2</span>
+                            <span class="text-[10px] text-purple-200 uppercase">Months</span>
+                        </div>
+                        <div class="bg-purple-950/80 p-3 rounded-2xl border border-purple-500/30">
+                            <span id="timer-weeks" class="block text-2xl md:text-3xl font-bold text-purple-300">0</span>
+                            <span class="text-[10px] text-purple-200 uppercase">Weeks</span>
+                        </div>
+                        <div class="bg-purple-950/80 p-3 rounded-2xl border border-purple-500/30">
+                            <span id="timer-days" class="block text-2xl md:text-3xl font-bold text-purple-300">0</span>
+                            <span class="text-[10px] text-purple-200 uppercase">Days</span>
+                        </div>
+                        <div class="bg-purple-950/80 p-3 rounded-2xl border border-purple-500/30">
+                            <span id="timer-hours" class="block text-2xl md:text-3xl font-bold text-purple-300">00</span>
+                            <span class="text-[10px] text-purple-200 uppercase">Hours</span>
+                        </div>
+                        <div class="bg-purple-950/80 p-3 rounded-2xl border border-purple-500/30">
+                            <span id="timer-minutes" class="block text-2xl md:text-3xl font-bold text-purple-300">00</span>
+                            <span class="text-[10px] text-purple-200 uppercase">Minutes</span>
+                        </div>
+                        <div class="bg-purple-950/80 p-3 rounded-2xl border border-purple-500/30">
+                            <span id="timer-seconds" class="block text-2xl md:text-3xl font-bold text-purple-300">00</span>
+                            <span class="text-[10px] text-purple-200 uppercase">Seconds</span>
+                        </div>
+                    </div>
+
+                    <div id="timer-summary" class="mt-5 text-xs md:text-sm text-purple-200 font-medium bg-purple-950/50 py-2.5 px-4 rounded-xl inline-block border border-purple-400/20">
+                        Counting every precious second with you!
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- ANIMATED PANDA -->
+        <div id="panda-container" class="fixed z-30 pointer-events-none transition-all duration-1000 bottom-4 left-4 md:left-10">
+            <div class="relative w-32 h-32 md:w-40 md:h-40">
+                <svg id="panda-svg" viewBox="0 0 200 200" class="w-full h-full drop-shadow-2xl">
+                    <circle cx="45" cy="45" r="22" fill="#1e1b4b" />
+                    <circle cx="155" cy="45" r="22" fill="#1e1b4b" />
+                    <circle cx="45" cy="45" r="12" fill="#f43f5e" opacity="0.3" />
+                    <circle cx="155" cy="45" r="12" fill="#f43f5e" opacity="0.3" />
+                    <ellipse cx="100" cy="140" rx="60" ry="50" fill="#ffffff" stroke="#1e1b4b" stroke-width="4"/>
+                    <ellipse cx="100" cy="145" rx="42" ry="35" fill="#f3e8ff" />
+                    <ellipse cx="100" cy="88" rx="56" ry="46" fill="#ffffff" stroke="#1e1b4b" stroke-width="4"/>
+                    <ellipse cx="74" cy="85" rx="16" ry="20" fill="#1e1b4b" transform="rotate(-15 74 85)"/>
+                    <ellipse cx="126" cy="85" rx="16" ry="20" fill="#1e1b4b" transform="rotate(15 126 85)"/>
+                    <circle cx="76" cy="83" r="6" fill="#ffffff"/>
+                    <circle cx="77" cy="83" r="3" fill="#000000"/>
+                    <circle cx="124" cy="83" r="6" fill="#ffffff"/>
+                    <circle cx="123" cy="83" r="3" fill="#000000"/>
+                    <circle cx="58" cy="100" r="8" fill="#f43f5e" opacity="0.4"/>
+                    <circle cx="142" cy="100" r="8" fill="#f43f5e" opacity="0.4"/>
+                    <ellipse cx="100" cy="94" rx="7" ry="5" fill="#1e1b4b"/>
+                    <path d="M 93 100 Q 100 108 107 100" fill="none" stroke="#1e1b4b" stroke-width="3" stroke-linecap="round"/>
+                    <g id="panda-bamboo" class="opacity-0 transition-opacity duration-500">
+                        <rect x="135" y="85" width="10" height="65" rx="3" fill="#22c55e" transform="rotate(-20 135 85)" class="animate-chew"/>
+                        <line x1="133" y1="105" x2="142" y2="101" stroke="#15803d" stroke-width="2"/>
+                        <line x1="138" y1="125" x2="147" y2="121" stroke="#15803d" stroke-width="2"/>
+                    </g>
+                    <ellipse cx="50" cy="135" rx="15" ry="12" fill="#1e1b4b"/>
+                    <g id="panda-right-arm" class="transition-transform duration-300">
+                        <ellipse cx="150" cy="135" rx="15" ry="12" fill="#1e1b4b"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- VERBATIM LETTER MODAL -->
+    <div id="letter-modal" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div id="letter-card" class="bg-gradient-to-b from-purple-50 via-purple-100 to-white rounded-3xl max-w-2xl w-full max-h-[85vh] shadow-2xl border-4 border-purple-300 flex flex-col overflow-hidden transform scale-95 transition-transform duration-300">
+            <div class="bg-purple-900 text-white p-4 text-center relative border-b border-purple-300 flex items-center justify-between px-6">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-heart text-pink-400 text-xl"></i>
+                    <span class="font-handwriting text-2xl font-bold">2nd Monthsary Message</span>
+                </div>
+                <span class="text-xs bg-purple-800/80 px-3 py-1 rounded-full border border-purple-400/40">From Prince 😸💙</span>
+            </div>
+
+            <div class="p-6 md:p-8 overflow-y-auto custom-scrollbar text-slate-800 text-sm md:text-base leading-relaxed space-y-4 whitespace-pre-line font-normal">Happy 2nd Monthsary, my Love! 💜💖💜
+
+Time really flies when you're with the right person, and here we are, celebrating another month together. I just want to take this moment to remind you of how much you mean to me and how proud I am of you every single day. I appreciate all the risk you take just for our relationship, and I acknowledge all your hardships academically and in life 💜.
+
+Alam ko kung gaano katindi at kadaming sacrifices ang ginagawa mo as a nursing student. Maririnig palang yung salitang "nursing," alam ko nang kasama na doon yung puyat, pagod, at stress, mula sa mga nakaka-drain na exams, panibagong activities, hanggang sa mga nakakapagod na duty at shifts. Kaya gusto ko na malaman mo na sa kahit gaano ka-busy ang mga araw natin, nandito lang ako palagi para sayo 💜. Sa tuwing nakakaramdam ka ng overwhelm sa lahat ng ginagawa mo, I hope you know and remember na ako ang pahinga mo. Ready akong maging kakampi mo, tagapakinig sa mga rants mo, at safe space mo kapag kailangan mo ng hiningahan.
+
+I know na in every relationship, hindi maiiwasang magkaroon ng ups and downs o mga problemang dumadating. Pero I want to promise to you na kahit anong pagsubok ang harapin natin, hindi ko kailanman hahayaang masira tayo ng mga yan. Instead, gagamitin natin yun para mas masuto, mas maging matatag, at mas mahalin ang isa't isa. As long as I am breathing, hinding-hindi ako susuko sayo at sa atin. I will always choose to love, understand, and stay by your side through every single hurdle. Hanggang dulo na tayo Love, ikaw na ang first at last ko, habang buhay na ito HAHAHA kaya kung ano man mga problema na maharap natin, lagi natin maaayos at oovercome yan.
+
+Thank you for being my favorite person and for letting me love you. Happy 2nd monthsary, Loveee! Kapit lang palagi, proud na proud ako sayo, we'll conquer more months and years to come, at sobrang mahal na mahal kitaaa! 🩺✨💜
+
+From your eternally loving Boyfriend, Prince 😸💙</div>
+
+            <div class="p-4 bg-purple-100 border-t border-purple-200 flex justify-center">
+                <button onclick="finishReadingLetter()" class="bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white font-bold py-3.5 px-8 rounded-full shadow-lg border border-purple-300 transition-all transform hover:scale-105 flex items-center gap-2 cursor-pointer text-base">
+                    <span>Finished Reading 💜</span>
+                    <i class="fa-solid fa-check-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT -->
+    <script>
+        const START_DATE = new Date(2026, 7, 27, 0, 0, 0); // August 27, 2026
+
+        const photoCardsData = [
+            {
+                id: 1,
+                message: "You're the only one in my heart",
+                imgSrc: "MOAlove1.jpg"
+            },
+            {
+                id: 2,
+                message: "You make me feel like everything's okay even when the days are worse",
+                imgSrc: "MOAlove3.jpg"
+            },
+            {
+                id: 3,
+                message: "In every time, day, and universe, I will always choose you 💜",
+                imgSrc: "MOAlove2.jpg"
+            }
+        ];
+
+        let currentCardIndex = 0;
+        let isFirstLetterClose = true;
+
+        function handleImageError(img) {
+            console.warn("Could not find image: " + img.src + ". Make sure MOAlove1.jpg is in the exact same folder as this HTML file.");
+            img.src = "https://placehold.co/500x600/7e22ce/ffffff?text=Missing+MOAlove1.jpg";
+        }
+
+        function initFallingHearts() {
+            const container = document.getElementById('hearts-container');
+            const heartEmojis = ['💜', '💖', '🪻', '✨', '💜'];
+            for (let i = 0; i < 25; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'falling-heart';
+                heart.innerText = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.animationDuration = `${5 + Math.random() * 5}s`;
+                heart.style.animationDelay = `${Math.random() * 6}s`;
+                heart.style.fontSize = `${14 + Math.random() * 18}px`;
+                container.appendChild(heart);
+            }
+        }
+
+        function startExperience() {
+            document.body.style.backgroundColor = '#2e1065';
+            const introScreen = document.getElementById('intro-screen');
+            const mainContent = document.getElementById('main-content');
+            introScreen.style.opacity = '0';
+            introScreen.style.transition = 'opacity 1s ease';
+            setTimeout(() => {
+                introScreen.style.display = 'none';
+                mainContent.classList.remove('opacity-0');
+            }, 1000);
+            initFallingHearts();
+            startLiveTimer();
+        }
+
+        function openMailModal() {
+            const modal = document.getElementById('letter-modal');
+            const card = document.getElementById('letter-card');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-95');
+            card.classList.add('scale-100');
+        }
+
+        function finishReadingLetter() {
+            const modal = document.getElementById('letter-modal');
+            const card = document.getElementById('letter-card');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+
+            document.getElementById('top-pull-tab').classList.remove('-translate-y-full');
+
+            if (isFirstLetterClose) {
+                isFirstLetterClose = false;
+                setTimeout(() => {
+                    document.getElementById('step-1-wrapper').classList.add('hidden');
+                    const step2 = document.getElementById('step-2-wrapper');
+                    step2.classList.remove('hidden');
+                    step2.classList.add('flex');
+                    document.getElementById('panda-bamboo').classList.remove('opacity-0');
+                }, 500);
+            }
+        }
+
+        function reopenMail() {
+            openMailModal();
+        }
+
+        function handleNextPhotoCard() {
+            currentCardIndex++;
+            if (currentCardIndex < photoCardsData.length) {
+                const card = photoCardsData[currentCardIndex];
+                document.getElementById('card-badge').innerText = `Photo ${card.id} of 3`;
+                document.getElementById('card-message-text').innerText = card.message;
+                
+                const imgElement = document.getElementById('card-display-img');
+                imgElement.src = card.imgSrc;
+
+                if (currentCardIndex === photoCardsData.length - 1) {
+                    document.getElementById('next-card-btn-text').innerText = "See Final Message 💜";
+                }
+            } else {
+                goToFinaleStep();
+            }
+        }
+
+        function loadPhotoCardImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('card-display-img').src = e.target.result;
+                    photoCardsData[currentCardIndex].imgSrc = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function goToFinaleStep() {
+            document.getElementById('step-2-wrapper').classList.add('hidden');
+            document.getElementById('step-2-wrapper').classList.remove('flex');
+            const finale = document.getElementById('step-3-wrapper');
+            finale.classList.remove('hidden');
+            finale.classList.add('flex');
+            document.getElementById('panda-bamboo').classList.add('opacity-0');
+            document.getElementById('panda-right-arm').classList.add('animate-wave');
+            startPurpleHeartFireworks();
+        }
+
+        function startPurpleHeartFireworks() {
+            const duration = 15 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                const particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: Math.random(), y: Math.random() - 0.2 },
+                    colors: ['#a855f7', '#c084fc', '#d8b4fe', '#f43f5e', '#ffffff']
+                }));
+            }, 250);
+        }
+
+        // EXPLICITLY LOCKED MILESTONE COUNTER FOR EXACT 2 MONTHS
+        function startLiveTimer() {
+            function updateTimer() {
+                const now = new Date();
+                const diff = now - START_DATE;
+
+                const seconds = Math.floor((diff / 1000) % 60);
+                const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                
+                // Since today is the exact 2-month milestone, months is locked to 2, weeks to 0, days to 0.
+                document.getElementById('timer-months').innerText = "2";
+                document.getElementById('timer-weeks').innerText = "0";
+                document.getElementById('timer-days').innerText = "0";
+                document.getElementById('timer-hours').innerText = String(hours).padStart(2, '0');
+                document.getElementById('timer-minutes').innerText = String(minutes).padStart(2, '0');
+                document.getElementById('timer-seconds').innerText = String(seconds).padStart(2, '0');
+            }
+
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+    </script>
+</body>
+</html>
